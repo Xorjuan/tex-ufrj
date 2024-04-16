@@ -1,0 +1,213 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{algorithmicx}
+
+
+
+
+
+\newcommand{\edit}[1]{#1}
+	
+\overfullrule=10pt
+
+\title{Resumo sistematico da funcionalidade do algoritimo RSA, uma abordagem de aprendizado e uso pratico}
+\author{juan perri}
+
+
+
+\pagestyle{pagemain}
+
+
+
+
+%colocar o emblema da ufrj e fazer a capa do curso, vai ficar muito pica:
+
+
+
+\begin{document}
+
+\maketitle
+
+\thispagestyle{pagefirst}
+
+\begin{center}
+\caption{Universidade Federal do Rio De Janeiro}
+\end{center}
+
+\begin{center}
+    \caption{INSTITUTO DE COMPUTAÇÃO - DCC/IC  }
+\end{center}
+
+\begin{center}
+    \caption{Números inteiros e criptografia (MAB 624)}
+\end{center}
+\begin{center}
+    \caption{Docente Daniel Bastos}
+\end{center}
+%começa o trabalho pós o titulo 
+\begin{abstract}
+o uso da criptografia no mundo moderno se torna cada vez mais importante a medida que queremos fazer compras, ter privacidade, e proteger dados importantes, já pensou o que seria se nossos dados de contas bancarias não tivessem criptografadas, qualquer pessoa teria acesso aos nossos dados pessoais e pensando nisso foi implementado um metodo que vem de muito tempo a criptografia, tem um papel vital para a segurança de dados seja no ambito de guerra como o algoritmo de Júlio-cezar desde de algoritimos mais sofisticados como a de curva elíptica que atualmente é muito popular. mas vamos falar sobre um metodo metodo especifico o rsa.
+
+%centralizar
+\begin{keyword} \sep%
+\begin{center}
+    
+
+\item criptografia, chaves-assimetricas, Rsa.
+\end{center}
+\end{keywords}
+\end{abstract}
+
+\section{historia e assimetria}
+\subsection{como surgiu esse algoritimo, e como ele funciona}
+Vamos abordar um pouco sobre ele o método RSA (Rivest-Shamir-Adleman), é um método de criptografia assimétrico criado em 1977. Ou seja ele funciona de forma que precisa de um conjunto de chaves para desencriptar a mensagem logo de forma que quem tem a chave de encriptar não necessariamente tem a chave de desencriptar logo isso gera uma segurança maior pois não há risco de outras pessoa obterem essa chave que criptografa esse dado, como citado por essa imagem :
+%imagem mostrando a criptografia assicrona 
+\begin{figure}
+\centering
+\includegraphics[width=1\textwidth]{Captura de tela 2024-03-29 202908}
+\end{figure}
+
+\subsubsection{Continuação}para fins didáticos usaremos formatação teórica e exemplos simples para melhor abstração do método em si, explicando passo a passo o único ponto que eu não vou citar seria a explicação em geração de números primos, logo todos os primos nesse artigo são de exemplos de livros ou números pequenos.
+
+\section{Teoria dos numeros}
+Na "matemática pura" usamos o conceitos de teoria dos números para estudar a classe dos números inteiros, se torna vital para a implementação e estudo na área da computação, pois muitos problemas matemáticos complexos conseguem ser trabalhados na área de teoria dos números, a computação tem uma forte ligação nessa área da matemática sendo isso tão importante um resumo pratico dos pra maximizar o compreendimento do leitor.
+
+%praticando o uso de exemplificação de equações 
+\begin{equation}
+\centering
+ \zeta(s) = \sum_{n=1}^{\infty} \frac{1}{n^s}
+\end{equation}
+ \caption{figura 2: Um exemplo de uma poderosa ferramenta na teoria dos números seria a função de zeta de riemann é objeto de estudo a séculos}
+
+
+
+
+\subsection{NÚMEROS PRIMOS}
+São números naturais maiores que 1, que tem somente dois divisores distintos sendo 1 e o próprio numero. como exemplo de números primos temos : 2,3,5,11,13,17,19,23
+\subsection{MAXIMO DIVISOR COMUM}
+O máximo divisor comum (MDC), também conhecido como maior divisor comum ou maior fator comum, de dois números inteiros é o maior número inteiro que divide ambos os números sem deixar resto. você pode ver em livros e em alguns algoritmos a sigla "GCD" que significa "greatest common divisor", é a mesma coisa só em inglês.
+\subsection{CONGRUENCIA}
+Congruência é um conceito matemático que se refere à relação entre dois números que deixam o mesmo resto quando divididos por um terceiro número como exemplo formal temos : $a \equiv b (mod$ $m) ou seja $7 \equiv  2 (mod$ $3 )$, ou seja ambos deixam resto 1 quando divididos por 3 logo 7 e 2 são congruentes em modulo 3.
+
+\subsection{PHI DA FUNÇÃO DE EULER $\phi$}
+A função phi de Euler, também chamada de função totiente de Euler, é representada pela letra grega $\phi$. Ela determina o número de inteiros positivos menores que um dado número natural n e coprimos com n como exemplo temos phi(8) ele pode ser representado por essa 3 palavras também, pois os únicos inteiros menores de 8 e que são co-primos de 8 são 1,3,5,7.... ou seja 4 inteiros que faz o $\phi(8)=4$.
+
+%pular linha que funcionou :)
+\vspace{1cm}
+
+\caption{RSA PSEUDOCODIGO instrução rápida para o algoritmo do rsa - recomendado para usuários já acostumados com o sistema.}
+   % usando a lista para numerar nosso pseudo-codigo 
+ \begin{itemize}
+     \item Escolha dois números primos $p$ e $q$ e faça o produto deles que será a letra $n=p*q$
+     \item  Temos que gerar o $\phi$ $(n)$, que é gerado o produto de $\phi$=$(p-1)*(q-1)$ 
+     \item Use um $e$ que pertença ao conjunto dos números inteiros $e$ $\in$ $Z$ e que o máximo divisor comum de $e$ com $\phi$($n$) tem que ser igual a 1 
+     \item Ache o $d$ $\in$ $Z$ que e ele precisa ter congruência com o modulo de $\phi$($n$) sendo congruente com 1
+     \item Separe sua chave publica ($n$,$e$) e sua chave privada ($p,q,d$)
+     \item Escolha sua Mensagem mas ela tem que ser menor de o produto de $p$  e  $q$, logo $M < n$
+     \item A criptografia da mensagem será feita usando $C$ $\equiv$ $M^e$ ($mod$  $n$ ) 
+     \item Para a descriptografia da mensagem que usamos $C$ $\equiv$ $C^d$ ($mod$  $n$)
+ \end{itemize}
+ 
+
+
+\section{Abstração sobre o conceito de cada etapa do algoritmo}
+\subsection{Geração das chaves }
+ Geração das chaves para o sistema assimétrico RSA, essas chaves são nossas variáveis $p$ e  $q$, elas precisam ser "números primos grandes", e usamos esses números pois esse sistema se baseia na fatoração do produto de números primos e na dificuldade dos mesmos, pois os únicos divisores comum dos números primos são um e eles mesmos, isso ajuda se queremos criptografar algo, pois torna segura a nossa comunicação e tornar ela difícil para terceiros descriptografar ou decifrar. Na computação moderna é muito custoso a fatoração de números primos pode demorar décadas para uma quebra de fatoração em força bruta, pois é algo exponencial. ou seja a propriedade do numero primo em si dificulta muito, logo tornando importante usar números primos grandes para tornar o algoritmo seguro.
+
+\subsection{Geração do $\phi$$(n)$$ }
+A geração do nosso totiente de Euler $\phi$, ele serve para garantir que a quantidade de co-primos de um numero de que são menores que ele mesmo. um numero co-primo ou números primos entre si, são quando os dois números tem como o máximo divisor comum o 1, ex : $mdc(7,11)=1$. se essa regra não for respeitada isso pode gerar a problemas no algoritmo ele não pode decifrar de maneira correta e isso pode gerar insegurança pois se reconhecer o mdc entre o rsa e $\phi(n)$, pode fatorar n e por sua vez revelar a chave privada, isso se torna bem fácil com os computadores modernos sendo altamente precisos e em horas já conseguindo fazer esse tipo de operação.
+
+\subsection{Escolha do $e$}
+ Para escolhermos um $e$ ele tem que ser um numero positivo e o mdc dele com o $phi(n)$ tem que ser igual congruente com 1, mas atualmente o número mais usado para nesse método é $e=65537$, mas você deve está pensando que isso não faz sentido visto que se todos ou a maioria usassem esse numero o método não seria tão seguro assim mas esse numero tem umas características que fazem ele ser um dos mais populares até os dias de hoje, a segurança desse numero ele é pequeno e rápido para a verificação e suficiente para fornecer segurança adequada e ele é um numero pois o outro numero se tiver um tamanho grande recomendado de 2048 bits ou mais, vai demorar muito entrando nos problemas de tempo computacional para a fatoração e força bruta, problemas já abordados anteriormente. 
+ 
+\subsection{Obitenção da chave privada $d$}
+Há duas formas para obter o nosso $d$ temos o método do algoritmo Estendido de Euclides ou o algoritmo do inverso multiplicativo modular, vou listar as duas formas e explicar como elas funcionam :
+
+\subsubsection{Algoritmo do inverso modular}
+ O método que eu usei para fazer a criptografia e mais simples de ser feita a mão, sendo representado por $a*x$ ≡ 1$(mod$  $m$), ou seja a e x são multiplicados e o resultado dividido por m, o resto sendo 1. Na nossa aplicação do rsa ele seria $d*e$ $\equiv$ 1$ $(mod$ $\phi(n))$. 
+ 
+ \subsubsection{Algoritmo de Euclides estendido}
+ Recomendado para valores grandes de $m$, logo ele encontra os valores de $a$ e $m$, para calcular o inverso modular. $MDC(7,11) = 1$. para a nossa aplicação usando o esse algoritmo seria : $mdc(e,\phi(n))$. caso o $mdc$ dê 1 eles são coprimos, esse método eu acho interessante para usar a verificação da nossa chave privada, assim temos certeza que nosso sistema está funcionando de forma correta. 
+ 
+\subsection{Ordenação das chaves}
+Organização do par das chaves sendo elas o conjunto publico com os valores atribuídos a variáveis $(n,e)$, que esses são de domínio publico ou seja qualquer pessoa pode ter acesso, e o conjunto privado $(p,q,d)$, que fica com quem encriptou a mensagem mas caso a pessoa queira compartilhar sua chave privada ela precisa enviar somente a $(d)$, essa terceira pessoa. 
+
+\subsection{A mensagem $M$}
+Escolha da mensagem que queremos enviar, ela precisa ser menor que o tamanho do produto dois dos primos que é representado por $n$ ou seja a $M < n$, M sendo representada pela mensagem por isso que tratamos sobre o tamanho dos primos serem grande, tanto para a segurança do algoritmo quanto a capacidade do tamanho da mensagem que será encriptada, e usamos números nesse sistema logo caso queira representar uma frase, terá que usar um outro algoritmo para usar um conjunto de tabela Ascii - American Standard Code for Information Interchange, que é padrão para todos os computadores e com isso representar sua frase em números e por fim criptografar em rsa...
+
+\subsection{Encriptando a mensagem $c$}
+A parte mais importante pois vamos encriptar nossa mensagem para isso vamos precisar aplicar o modulo inverso para criptografar nossa  mensagem se utilizando o nosso $e$ usando o modulo inverso de n sendo $M^e(mod$ $n)$ , assim temos nosso $c$ que representa nossa mensagem criptografada. sendo bem simples com o auxilio da linguagem de programação python pois tem a opção de usar o inverso modular para explicitar a função.
+
+\subsection{Descriptografando a mensagem }
+Descriptografia da nossa mensagem será feita com o acesso da nossa chave privada $d$ com a mensagem criptografada $c$ e o produto dos nossos números primos $n$, sendo representada por $C^d$ ($mod$  $n$) e usando o modulo inverso de $n$ mais uma vez, conseguimos descriptografar nossa mensagem.
+
+\subsection{exemplos de como com números primos pequenos e outro com um valor de 2048 bit }
+\subsubsection{Exemplo simples que pode ser feito a mão}
+\caption{primeiro exemplo com números pequenos que poderia ser feito com caneta e papel, vemos que a mensagem original é 9 mas quando usamos o modulo inverso a mensagem se torna $c = 15$, sendo $c$ a variável com a mensagem encriptada, usamos também um testa para verificar nosso $d$ usando o $mod(d*e,$\phi)$ $=1$, com isso temos nosso teste de co-primo confirmando nossa chave criptografada. usando as formulas de encriptação e decriptação que foi abordado anteriormente construímos nosso exemplo de forma correta e funcional poderia ser feito no papel pelo uso de números pequenos, mas isso gera vulnerabilidades que é tratado no próximo tópico. }
+
+\begin{itemize}
+\centering
+    \item	 $p = 3$
+    \item	 $q = 11$ 
+    \item	 $n = p*q = 33$
+    \item	 $phi = (p-1)*(q-1) = 20$
+    \item	 $e = 5$ 
+    \item	 $d = e^-1 mod(phi)$
+    \item	 $d = 13$ 
+    \item	 $mod(d*e,phi) = 1$
+    \item	 $M = 9$
+    \item	 $c = mod(m^e,n) = 15$ 
+    \item    $decrypt = mod(c^d,n) = 9$
+\end{itemize}
+
+\caption{Um exemplo mais próximo de uma aplicação real aqui os valores são bem maiores sendo necessário o uso de um computador, pois os cálculos são expressivamente maiores e nesse caso foi usado a linguagem de programação python e a ferramenta SAGE-MATH que é uma ferramenta para matemática tendo ferramentas especificas para criptografia e afins. logo haverão instruções que são típicas da linguagem mas todas elas serão explicadas para a melhor interpretação do leitor. 
+}
+\begin{itemize}
+\centering
+\item   $p = 2^{31-1}$
+\item 	$q = 2^{61-1}$
+\item 	${is_prime}(p) = true$
+\item	$is_prime(q) = true$
+\item 	$n = p*q = 4951760154835678088235319297$
+\item 	$phi = (p-1)*(q-1)$
+\item 	$e = 65537$
+\item 	$d = inverse_mod(e,phi)$
+\item 	$mod(d*e,phi) = 1$
+\item 	$M = 40028922$
+\item 	$c = mod(m^e,n) = 4221763824112946619889789749$
+\item   $decrypt = mod(c^d,n) = 40028922$
+\end{itemize}
+
+\caption{Usamos a função para verificar se nosso valor no expoente é primo, uma função do python já a função "inverse mod" também é própria do sage-math.
+}
+
+\section{Analise sobre segurança do algoritmo rsa - possíveis formas de atacar}
+Nada é isento de invasão e quebra o rsa também tem suas fraquezas, o pior caso seria um ataque de força bruta que já foi citado como uma possibilidade mas ele só é funcional caso o $\phi$ não seja coprimo. o tamanho dos números primos seja inferior a $2048$ $bits$ podemos ter ataques de chaves fraqueadas pois são chaves geradas de forma inadequada, por exemplo escolhendo números primos pequenos ou usando o mesmo e para a mesma chaves, isso pode facilitar ataques de faturização. mas podemos usar técnicas de fatoração de inteiros algoritmos específicos para fatorar o $modulo$ $n$, sem os seus primos respectivos, um exemplo seria o crivo de fermat um famoso algoritmo para esse fim. mas temos o uso de computação quântica pois em 8 horas seria capaz de quebrar a criptografia do $rsa$ $2048 bits$, sendo o sistema padrão até então. isso faz que o rsa. futuramente tenha seus dias contados pois serão criados novos métodos. 
+
+
+
+
+						 
+
+
+%define the following sections to hide their Section Number (Notes Style)
+\ledgernotes
+
+
+
+%parte para fontes
+
+\section*{Fontes}
+\begin{itemize}
+\item $https://lume.ufrgs.br/bitstream/handle/10183/110014/000951896.pdf$
+\item $https://doc.sagemath.org/html/en/thematic_tutorials/numtheory_rsa.html$
+\item $https:github.com/ashishrsai/RSA_SAGE$
+\item $https://nmsl.cs.nthu.edu.tw/wpcontent/uploads/2011/09/images_courses_CS3330_2015_Sage3_RSA.pdf$
+\item $https://www.math.ucdavis.edu/anne/FQ2010/Number_Theory_RSA.html$
+\item $https://github.com/mimoo/RSA-and-LLL-attacks/blob/master/coppersmith.sage$
+\end{itemize}
+
+
+\end{document}
+
